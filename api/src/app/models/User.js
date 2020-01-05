@@ -16,14 +16,15 @@ class User extends Model {
       }
     );
 
-    this.addHook('beforeSave', async (user, opt) => {
+    this.addHook('beforeSave', async user => {
       if (user.password) {
-        try {
-          const c = await bcrypt.hash('3333', 8);
-          console.log(c);
-        } catch (err) {
-          console.log('deu ruim', err);
-        }
+        // const hashedPassword = await new Promise((resolve, reject) => {
+        //   bcrypt.hash('1222233', 8, (err, hash) => {
+        //     if (err) reject(err);
+        //     resolve(hash);
+        //   });
+        // });
+        user.password_hash = await bcrypt.hash(`${user.password}`, 8);
       }
     });
 
