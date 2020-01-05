@@ -16,6 +16,10 @@ class UserController {
       password_hash,
     });
   }
+
+  update(req, res) {
+    return res.json({ message: 'OK' });
+  }
 }
 
 export default new UserController();
