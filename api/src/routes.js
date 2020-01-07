@@ -24,6 +24,7 @@ router.put('/users', UserController.update);
 
 router.get('/appointments', AppointmentController.index);
 router.post('/appointments', AppointmentController.store);
+router.delete('/appointments/:id', AppointmentController.delete);
 
 router.get('/schedules', ScheduleController.index);
 
