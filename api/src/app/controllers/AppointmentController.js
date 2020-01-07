@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { isBefore, parseISO, startOfHour } from 'date-fns';
+import { isBefore, parseISO, startOfHour, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
+import Notification from '../../database/schemas/Notification';
 
 class AppointmentController {
   async index(req, res) {
@@ -35,7 +37,9 @@ class AppointmentController {
 
   async store(req, res) {
     const schema = Yup.object().shape({
-      provider_id: Yup.number().required(),
+      provider_id: Yup.number()
+        .required()
+        .notOneOf([req.userId], 'Selecione um fornecedor diferente'),
       date: Yup.date().required(),
     });
 
@@ -81,6 +85,18 @@ class AppointmentController {
         .status(400)
         .json({ error: 'Horário indisponível para esse fornecedor.' });
     }
+
+    const { name: userName } = await User.findByPk(req.userId);
+    const formattedDate = format(
+      hoursStart,
+      "'dia' dd 'de' MMMM', às' H:mm'h'",
+      { locale: ptBR }
+    );
+
+    await Notification.create({
+      content: `Novo agendamento de ${userName} para ${formattedDate}`,
+      user: provider_id,
+    });
 
     const appointment = await Appointment.create({
       provider_id,
