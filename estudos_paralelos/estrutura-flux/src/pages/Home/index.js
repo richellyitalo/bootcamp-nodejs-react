@@ -8,7 +8,7 @@ export default function Home() {
       <li>
         <img
           src="https://static.netshoes.com.br/produtos/tenis-olympikus-attract/20/D22-1787-120/D22-1787-120_detalhe2.jpg?ims=326x"
-          alt=""
+          alt="Tênis"
         />
 
         <strong>Tênis dahora</strong>
