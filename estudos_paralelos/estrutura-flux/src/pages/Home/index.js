@@ -10,6 +10,7 @@ export default function Home() {
           src="https://static.netshoes.com.br/produtos/tenis-olympikus-attract/20/D22-1787-120/D22-1787-120_detalhe2.jpg?ims=326x"
           alt=""
         />
+
         <strong>Tênis dahora</strong>
 
         <span>R$129,90</span>
