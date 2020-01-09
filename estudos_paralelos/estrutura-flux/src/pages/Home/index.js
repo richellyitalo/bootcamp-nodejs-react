@@ -27,6 +27,7 @@ export default function Home() {
           alt=""
         />
         <strong>Tênis dahora</strong>
+
         <span>R$129,90</span>
 
         <button type="button">
