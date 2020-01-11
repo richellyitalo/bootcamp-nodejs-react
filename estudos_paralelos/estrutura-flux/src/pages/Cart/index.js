@@ -6,10 +6,20 @@ import {
 } from 'react-icons/md';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import * as CartActions from '../../store/modules/cart/actions';
 
 import { Container, ProductTable, Total } from './styles';
 
-function Cart({ cart }) {
+function Cart({ cart, removeFromCart, updateAmount }) {
+  function decrement(product) {
+    updateAmount(product.id, product.amount - 1);
+  }
+
+  function increment(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+
   return (
     <Container>
       <ProductTable>
@@ -24,7 +34,7 @@ function Cart({ cart }) {
         </thead>
         <tbody>
           {cart.map(product => (
-            <tr>
+            <tr key={product.id}>
               <td>
                 <img src={product.image} alt={product.title} />
               </td>
@@ -34,11 +44,11 @@ function Cart({ cart }) {
               </td>
               <td>
                 <div>
-                  <button type="button">
+                  <button type="button" onClick={() => decrement(product)}>
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
-                  <input type="number" readOnly value={product.amount} />
-                  <button type="button">
+                  <input type="text" readOnly value={product.amount} />
+                  <button type="button" onClick={() => increment(product)}>
                     <MdAddCircleOutline size={20} color="#7159c1" />
                   </button>
                 </div>
@@ -47,7 +57,10 @@ function Cart({ cart }) {
                 <strong>R$258,80</strong>
               </td>
               <td>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => removeFromCart(product.id)}
+                >
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
@@ -69,11 +82,16 @@ function Cart({ cart }) {
 }
 
 Cart.propTypes = {
-  cart: PropTypes.shape(PropTypes.array).isRequired,
+  cart: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  removeFromCart: PropTypes.func.isRequired,
+  updateAmount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
