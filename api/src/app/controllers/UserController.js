@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import User from '../models/User';
+import File from '../models/File';
 
 class UserController {
   async store(req, res) {
@@ -57,7 +58,7 @@ class UserController {
       return res.status(400).json({ error: 'Dados inválidos.' });
     }
 
-    const { name, email, oldPassword } = req.body;
+    const { email, oldPassword } = req.body;
     const user = await User.findByPk(req.userId);
 
     if (email !== user.email) {
@@ -71,9 +72,18 @@ class UserController {
       return res.status(400).json({ error: 'Senha anterior incompatível.' });
     }
 
-    const { id, provider } = await user.update(req.body);
+    await user.update(req.body);
+    const { id, name, avatar } = await User.findByPk(req.userId, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'url', 'path'],
+        },
+      ],
+    });
 
-    return res.json({ user: { id, name, email, provider } });
+    return res.json({ user: { id, name, email, avatar } });
   }
 }
 
