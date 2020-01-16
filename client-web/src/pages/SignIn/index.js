@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 import logo from '~/assets/images/logo-from-flaticon.svg';
+import { signinRequest } from '~/store/modules/auth/actions';
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -11,9 +13,11 @@ const schema = Yup.object().shape({
   password: Yup.string().required('Senha é obrigatória'),
 });
 
-export default function index() {
-  function handleSubmit(data) {
-    console.tron.log(data);
+export default function SignIn() {
+  const dispatch = useDispatch();
+
+  function handleSubmit({ email, password }) {
+    dispatch(signinRequest(email, password));
   }
 
   return (

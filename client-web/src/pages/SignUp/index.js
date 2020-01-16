@@ -15,7 +15,7 @@ const schema = Yup.object().shape({
     .required('Senha é obrigatória'),
 });
 
-export default function index() {
+export default function SignUp() {
   return (
     <>
       <img src={logo} alt="GoBarber" height="100" />
