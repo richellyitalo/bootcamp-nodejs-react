@@ -35,7 +35,7 @@ class NotificationController {
     }
 
     const notification = await Notification.findOneAndUpdate(
-      req.params.id,
+      { _id: req.params.id },
       {
         read: true,
       },
