@@ -53,6 +53,9 @@ export const Profile = styled.div`
   }
 
   img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: block;
     margin-top: 2px;
     font-size: 12px;

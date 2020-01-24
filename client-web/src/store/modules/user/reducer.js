@@ -14,6 +14,9 @@ export default function user(state = INITIAL_STATE, action) {
         console.tron.warn('novo profile', action.payload.profile);
         draft.profile = action.payload.profile;
         break;
+      case '@auth/SIGN_OUT':
+        draft.profile = null;
+        break;
       default:
     }
   });
