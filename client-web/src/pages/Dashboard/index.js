@@ -11,8 +11,9 @@ import {
   parseISO,
 } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import pt from 'date-fns/locale/pt-BR';
+import ptBR from 'date-fns/locale/pt-BR';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+
 import api from '~/services/api';
 
 import { Container, Time } from './styles';
@@ -24,7 +25,7 @@ export default function Dashboard() {
   const [date, setDate] = useState(new Date());
 
   const dateFormatted = useMemo(
-    () => format(date, "d 'de' MMMM", { locale: pt }),
+    () => format(date, "d 'de' MMMM", { locale: ptBR }),
     [date]
   );
 
@@ -35,6 +36,7 @@ export default function Dashboard() {
       });
 
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       const data = range.map(hour => {
         const checkDate = setSeconds(setMinutes(setHours(date, hour), 0), 0);
         const compareDate = utcToZonedTime(checkDate, timezone);
@@ -42,9 +44,9 @@ export default function Dashboard() {
         return {
           time: `${hour}:00h`,
           past: isBefore(compareDate, new Date()),
-          appointment: response.data.find(a =>
-            isEqual(parseISO(a.date), compareDate)
-          ),
+          appointment: response.data.find(a => {
+            return isEqual(parseISO(a.date), compareDate);
+          }),
         };
       });
 
@@ -54,22 +56,21 @@ export default function Dashboard() {
     loadSchedule();
   }, [date]);
 
-  function handleDayPrev() {
+  function handlePrevDay() {
     setDate(subDays(date, 1));
   }
-
-  function handleDayNext() {
+  function handleNextDay() {
     setDate(addDays(date, 1));
   }
 
   return (
     <Container>
       <header>
-        <button type="button" onClick={handleDayPrev}>
+        <button type="button" onClick={handlePrevDay}>
           <MdChevronLeft size={36} color="#fff" />
         </button>
         <strong>{dateFormatted}</strong>
-        <button type="button" onClick={handleDayNext}>
+        <button type="button" onClick={handleNextDay}>
           <MdChevronRight size={36} color="#fff" />
         </button>
       </header>
